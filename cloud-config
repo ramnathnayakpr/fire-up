@@ -1,7 +1,7 @@
 #cloud-config
 
 runcmd:
+  - export DEBIAN_FRONTEND=noninteractive
   - git clone https://github.com/ramnathnayakpr/fire-up
   - cd fire-up
   - /bin/bash docker-ubuntu.sh
-  
