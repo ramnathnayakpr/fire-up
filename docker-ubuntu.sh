@@ -1,6 +1,7 @@
 #!/bin/bash
 
-curl -fsSL get.docker.com -o get-docker.sh
-sh get-docker.sh
+curl -fsSL https://get.docker.com -o get-docker.sh
 
-sudo usermod -aG docker ubuntu
+echo "sudo usermod -aG docker ubuntu" >> get-docker.sh
+
+sh get-docker.sh
