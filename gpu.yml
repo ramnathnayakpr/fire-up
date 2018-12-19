@@ -1,0 +1,64 @@
+- name: Install CUDA, Docker and NVIDIA Docker 2
+  hosts: gpu
+  become: True
+  vars:
+    repo_url : "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb"
+    key_url : "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub"
+  tasks:
+
+    - name: Install CUDA GPG Key
+      apt_key:
+        url: "{{ key_url }}"
+        state: present
+        
+    - name: Install CUDA repo metadata
+      apt:
+        deb: "{{ repo_url }}"
+        state: present
+
+    - name: Install CUDA and pre-req packages
+      apt:
+        name: ['gcc', 'linux-headers-{{ansible_kernel}}', 'cuda']
+        update_cache: yes
+        state: present
+
+    - name: Install Docker GPG Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+  
+    - name: Install Docker repo
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable"
+        state: present
+
+    - name: Install Docker and pre-req packages
+      apt:
+        name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'docker-ce']
+        update_cache: yes
+        state: present
+
+    - name: Add ubuntu user to docker groups
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Install NVIDIA Docker GPG Key
+      apt_key:
+        url: https://nvidia.github.io/nvidia-docker/gpgkey
+        state: present
+
+    - name: Install NVIDIA Docker repo
+      get_url:
+        url: https://nvidia.github.io/nvidia-docker/ubuntu{{ansible_distribution_version}}/nvidia-docker.list
+        dest: /etc/apt/sources.list.d/nvidia-docker.list
+
+    - name: Install NVIDIA Docker 2
+      apt:
+        name: nvidia-docker2
+        update_cache: yes
+        state: present
+
+    - name: Reboot
+      reboot:

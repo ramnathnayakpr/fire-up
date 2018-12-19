@@ -1,0 +1,31 @@
+[local]
+localhost ansible_connection=local
+vagrant ansible_host=127.0.0.1 ansible_port=2222 ansible_user=vagrant ansible_ssh_private_key_file=/Users/rpaneman/Documents/code/ansible/.vagrant/machines/default/virtualbox/private_key
+
+[ubuntu]
+132.145.42.121 ansible_user=ubuntu
+
+[ol7]
+132.145.59.136 ansible_user=opc
+
+[gpu]
+132.145.38.89 ansible_user=ubuntu ansible_python_interpreter=/usr/bin/python3
+
+[oci:children]
+ubuntu
+ol7
+gpu
+
+#hosts:
+#  local:
+#    localhost:
+#  ubuntu:
+#    ubuntuvm.sub10041324240.myvcn.oraclevcn.com:
+#      ansible_host=132.145.42.121
+#      ansible_user=ubuntu
+#      ansible_ssh_private_key_file=/Users/rpaneman/.ssh/RNKey
+#  ol7:
+#    ol7vm.sub10041324241.myvcn.oraclevcn.com:
+#      ansible_host=132.145.59.136
+#      ansible_user=opc
+#      ansible_ssh_private_key_file=/Users/rpaneman/.ssh/RNKey
